@@ -1,0 +1,91 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# PyTorch Models
+*.pth
+*.pt
+models/
+checkpoints/
+
+# Data directories
+data/
+datasets/
+cifar-10-batches-py/
+MNIST/
+
+# Logs
+*.log
+*.out
+training_output.log
+comparison_log.txt
+
+# Plots and outputs
+plots/
+results/
+*.png
+*.jpg
+*.jpeg
+*.svg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# CUDA
+*.cu.o
+*.cudafe*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+tmp/
+temp/
+
+# Analysis files (optional - uncomment if you want to track these)
+# COMPARISON_ANALYSIS.txt
+# IMPROVED_MAP_DETAILS.txt
+
+# PDFs (optional - uncomment if you want to exclude research papers)
+*.pdf
