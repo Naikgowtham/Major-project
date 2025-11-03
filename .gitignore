@@ -33,11 +33,11 @@ venv.bak/
 # PyTorch Models
 *.pth
 *.pt
-models/
+models/  # Commented out to track model directory structure
 checkpoints/
 
 # Data directories
-data/
+data/  
 datasets/
 cifar-10-batches-py/
 MNIST/
@@ -58,7 +58,7 @@ results/
 
 # Jupyter Notebook
 .ipynb_checkpoints
-*.ipynb
+# *.ipynb  # Commented out to track notebooks
 
 # IDEs
 .vscode/
@@ -88,4 +88,4 @@ temp/
 # IMPROVED_MAP_DETAILS.txt
 
 # PDFs (optional - uncomment if you want to exclude research papers)
-*.pdf
+# *.pdf  # Commented out to track PDF files
