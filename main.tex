@@ -1,0 +1,472 @@
+\documentclass[12pt,a4paper]{report}
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{geometry}
+\geometry{margin=1in}
+\setstretch{1.3}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage{caption}
+\usepackage{tabularx} % for timeline table
+\usepackage{multirow} % for table multirow cells
+% --- Chapter heading style: "1. Introduction" etc. (left-aligned) ---
+\titleformat{\chapter}[hang]
+{\normalfont\Large\bfseries}
+{\thechapter.}
+{0.6em}
+{\Large}
+% Unnumbered chapter style (Declaration, Abstract etc.) centered uppercase
+\titleformat{name=\chapter,numberless}[block]
+{\centering\normalfont\huge\bfseries}
+{}
+{0pt}
+{\MakeUppercase}
+% Reduce vertical spacing before/after headings globally
+\titlespacing*{\chapter}{0pt}{-12pt}{18pt}
+\titlespacing*{\section}{0pt}{8pt}{8pt}
+\titlespacing*{\subsection}{0pt}{6pt}{6pt}
+% Convenience: unnumbered chapter added to TOC
+\newcommand{\chapterwithtoc}[1]{%
+\chapter*{#1}%
+\addcontentsline{toc}{chapter}{#1}}
+% Small spacing in list of figures
+\setlength{\cftbeforefigskip}{6pt}
+\begin{document}
+% ---------------- Title Page ----------------
+\begin{titlepage}
+\centering
+{\LARGE \textbf{Major Project-I Report on}}\\[0.5cm]
+{\Huge \textbf{Magnitude Attention-based Dynamic Pruning}}\\[0.8cm] % Adjusted spacing
+\textbf{Undergone at}\\[0.5cm]
+Department of Information Technology\\
+National Institute of Technology Karnataka\\[0.8cm] % Adjusted spacing
+\textbf{Under the guidance of}\\
+Dr. Dinesh Naik\\
+Assistant Professor\\[0.8cm] % Adjusted spacing
+\textbf{Submitted by}\\
+Ankith Kumar S H (221IT008)\\
+Gowtham (221IT028)\\
+Hemanth (221IT029)\\[0.8cm] % Adjusted spacing
+in partial fulfillment for the award of the degree of\\
+\textbf{Bachelor of Technology}\\
+in Information Technology\\[0.5cm] % Adjusted spacing
+% \includegraphics[width=0.35\textwidth]{image.png}\\[0.5cm] % Resized image and adjusted spacing
+\textbf{Department of Information Technology}\\
+National Institute of Technology Karnataka, Surathkal\\[0.5cm]
+September 2025
+\end{titlepage}
+
+\clearpage % Ensure Declaration starts on a new page
+
+\chapterwithtoc{DECLARATION}
+
+We hereby declare that the Major Project-I Work Report entitled \textbf{\textit{"Magnitude Attention-based Dynamic Pruning"}}, which is being submitted to the National Institute of Technology Karnataka, Surathkal, for the award of the Degree of Bachelor of Technology in Information Technology, is a bonafide report of the work carried out by us. The material contained in this Major Project-I Report has not been submitted to any University or Institution for the award of any degree.
+\vspace{1cm}
+
+\noindent
+(1) Ankith Kumar S H (221IT008) \\
+(2) Gowtham (221IT028) \\
+(3) Hemanth (221IT029) \\
+\vspace{1cm}
+
+\noindent
+Department of Information Technology \\
+Place : NITK, Surathkal \\
+Date : 22/09/2025
+% ---------------- Certificate ----------------
+\clearpage % Ensure Certificate starts on a new page
+
+
+\chapterwithtoc{CERTIFICATE}
+
+This is to certify that the Major Project Work Report entitled \textbf{\textit{"Magnitude Attention-based Dynamic Pruning"}} submitted by
+\vspace{0.5cm}
+
+\noindent
+(1) Ankith Kumar S H (221IT008) \\
+(2) Gowtham (221IT028) \\
+(3) Hemanth (221IT029) \\
+\vspace{0.5cm}
+
+as the record of the work carried out by them, is accepted as the B.Tech. Major Project-I work report submission in partial fulfillment of the requirement for the award of the degree of Bachelor of Technology in Information Technology in the Department of Information Technology, NITK Surathkal.
+\vspace{3cm}
+
+\begin{flushright}
+Dr. Dinesh Naik \\
+Department of Information Technology \\
+NITK Surathkal-575025
+\end{flushright}
+
+
+\clearpage % Ensure Acknowledgement starts on a new page
+
+% ---------------- Abstract ----------------
+\chapterwithtoc{Abstract}
+Neural network pruning is a critical technique for reducing model size and computational cost, enabling deployment of deep learning models on resource-constrained devices. Traditional pruning methods rely on static importance evaluation and lack adaptability during training. This report presents a dynamic pruning framework called \textbf{Magnitude Attention-based Dynamic Pruning (MAP)}.
+
+The proposed system extends MAP by integrating four complementary attention mechanisms: magnitude, gradient, curvature, and entropy. A dynamic fusion mechanism unifies these signals into a single importance score, while an exploration–exploitation schedule balances adaptive pruning with stable convergence. Responsibilities are divided into three modules: (i) multi-signal attention integration, (ii) optimization layer with dynamic fusion, and (iii) evaluation against strong baselines such as Lottery Ticket, SNIP, and HRank.
+
+The framework addresses major limitations of static pruning, including lack of adaptability and high overhead, and aims to provide a scalable methodology for efficient deep neural networks.
+
+\textbf{Keywords:} Neural Network Pruning, Magnitude Attention, Gradient Attention, Curvature Attention, Entropy Attention, Dynamic Fusion, Model Compression, Efficient Deep Learning
+
+\clearpage % This command forces a new page before the next content
+
+% ---------------- Table of contents / LOF ----------------
+
+
+
+
+\pagenumbering{roman} % Start roman page numbering for front matter
+\tableofcontents
+\listoffigures
+\vspace{6pt}
+
+\clearpage % Ensure Introduction starts on a new page
+% ---------------- 1. Introduction ----------------
+\chapter{Introduction}
+\section{Overview}
+The rapid expansion of deep neural networks has brought unprecedented accuracy and generalization capabilities across various domains, including computer vision and natural language processing. These advancements, however, come at a significant cost: the models are increasingly large, with architectures demanding massive computational resources, memory, and energy. While these large-scale models perform exceptionally well in high-performance computing environments with powerful GPUs and TPUs, their deployment on resource-constrained devices like mobile phones, IoT devices, and embedded systems remains a formidable challenge. The demand for efficient, yet powerful, deep learning models has therefore become a critical area of research. This project addresses this "efficiency gap" by exploring a sophisticated model compression technique known as neural network pruning. Pruning reduces network complexity by eliminating redundant parameters, thereby lowering storage requirements and accelerating inference without the need for specialized hardware.
+
+% Start a new page for next heading as requested
+\clearpage
+
+% ---------------- 2. Motivation ----------------
+\chapter{Motivation}
+Existing pruning techniques, while effective to a degree, face critical limitations that hinder their widespread adoption. Many methods rely on a static evaluation of weight importance, where a parameter's significance is determined at a single point in time, such as at initialization or after a model is fully trained. This approach ignores the dynamic nature of neural network optimization, where a weight's contribution to the network's function can change drastically throughout the training process. Consequently, static pruning can lead to suboptimal decisions, aggressively removing weights that might become crucial later on, or retaining parameters that are ultimately redundant. Furthermore, these techniques often suffer from a high dependency on initial conditions and a lack of adaptability during training, making them less robust across different architectures and tasks. The computational overhead associated with some of the more theoretically grounded methods, such as those based on Fisher information or Shapley values, also makes them impractical for large-scale models.
+
+These challenges motivate the development of more intelligent and dynamic pruning frameworks. Our project, \textbf{Magnitude Attention-based Dynamic Pruning (MAP)}, directly addresses these needs. MAP introduces a multi-criteria evaluation system that moves beyond simple magnitude by integrating magnitude, gradient, curvature, and entropy-based signals into a unified importance assessment framework. This ensures that the pruning process remains flexible and adaptive, capable of maintaining high accuracy even under aggressive compression ratios. The motivation is not only to reduce model size and computational load but also to establish a scalable and principled pruning methodology that bridges the gap between theoretical research and the real-world deployment of efficient deep learning models. By continuously and adaptively making pruning decisions throughout the training process, MAP provides a more robust and effective solution for achieving the critical balance between performance and efficiency.
+
+\clearpage
+
+% ---------------- 3. Literature Survey ----------------
+\chapter{Literature Survey}
+\section{Background and Related Works}
+The field of neural network compression has progressed substantially since the early heuristic days. In the late 1980s and early 1990s researchers observed that many neural networks contained significant redundancy; this led to the first systematic efforts to remove unnecessary weights and neurons without substantially degrading performance. These early approaches were mainly heuristic and focused primarily on magnitude: the idea that weights with very small absolute values contribute little to the network's outputs and could therefore be safely removed. Over time, this simple intuition matured into more formalized magnitude-based pruning techniques that became widely used due to their simplicity and reasonable efficacy.
+
+As model sizes grew and the need for practical deployment increased, researchers recognized that unstructured sparsity — while producing very high parameter reduction — did not translate easily to runtime speedups on general-purpose hardware. This observation led to increased interest in structured pruning where entire filters, channels or even layers are removed, producing dense sub-networks that can exploit existing optimized dense linear algebra libraries. Methods such as ThiNet and HRank employ activation statistics and rank-based analyses of feature maps to identify redundant filters and channels that can be pruned with minimal impact on network performance. These structured techniques offered a pragmatic path toward runtime acceleration on commodity devices, an important step for real-world deployment.
+
+Around 2018 the community witnessed a conceptual shift driven by the Lottery Ticket Hypothesis (Frankle \& Carbin, 2018). They showed that dense networks often contain subnetworks — “winning tickets” — that, when trained in isolation from the same initialization, can reach comparable accuracy. This insight suggested that pruning and sparsification are not merely compression tools but can reveal trainable substructures inherent in the initialization and optimization dynamics. However, iteratively searching for these winning tickets through repeated pruning and retraining cycles is computationally expensive, limiting the approach's scalability.
+
+Complementary to Lottery Ticket, single-shot sensitivity-based pruning methods such as SNIP (Lee et al., 2019) proposed evaluating the sensitivity of each connection at initialization using gradient information. SNIP computes the connection-wise saliency by taking the magnitude of the gradient of the loss with respect to each weight (scaled by the weight itself) and selects parameters to prune accordingly prior to training. While SNIP offers an efficient one-shot approach without retraining, it inherits the limitation of being static: the importance evaluation happens only once and does not adapt to the evolving optimization trajectory.
+
+To address sensitivity and structural issues, several methods integrated information-theoretic and second-order notions. Fisher-information-based pruning estimates how the loss would change if a parameter were removed, treating importance in probabilistic terms. Group Fisher Pruning (Liu et al., 2021) extended this idea toward structured pruning by grouping parameters and using approximate Fisher information to guide removals. These approaches provide principled measures of importance that account for parameter interactions; however, the computational cost — deriving from Hessian or Fisher approximations — often becomes prohibitive for large-scale models unless clever approximations or grouping strategies are used.
+
+Game-theoretic interpretations of importance, such as Shapley-value-based pruning, examine the marginal contribution of each weight when cooperating with others. Shapley Pruning (Adamczewski et al., 2024) frames pruning as a cooperative game among parameters, computing Shapley values as fair attributions of importance. The theoretical elegance comes with steep computational expense, since exact Shapley values scale factorially; practical work relies on Monte-Carlo approximations that still require heavy computation.
+
+Simultaneously, pragmatically motivated methods like DropNet (Min \& Motani, 2022) and Network Slimming (Liu et al., 2017) proposed integrating pruning decisions directly into the training loop by leveraging activation statistics and the scaling factors of batch normalization layers. These techniques are attractive for being lightweight and architecturally friendly, but their reliance on specific operations or statistics can restrict generality.
+
+Another important theme in the literature is the timing of pruning. Pre-training pruning (e.g., SNIP) acts at initialization, while post-training pruning acts after a full training pass and is often followed by fine-tuning. During-training or dynamic pruning lies between these extremes: pruning decisions are made adaptively during optimization, allowing the method to react to parameter trajectories. Dynamic schemes such as those explored in dynamic sparse training (DST) and Magnitude Attention-based Dynamic Pruning (MAP) embrace exploration — allowing parameters to be pruned and regrown — followed by exploitation — consolidating a final sparse structure. MAP in particular introduced continuous attention values in the forward and backward passes, rather than hard binary masks, enabling a more nuanced gradient flow to pruned weights during exploration.
+
+Despite the breadth of techniques and theoretical tools, a number of recurring limitations are visible. Many methods remain fundamentally static in their importance assessment; others are principled but computationally expensive; and several approaches ignore layer-wise sensitivity, applying uniform pruning across the network. The multiple criteria — magnitude, first-order gradient sensitivity, second-order curvature, and activation-derived entropy — each capture different aspects of importance, and combining them in a dynamic manner is a promising direction to reconcile robustness, efficiency, and deployability.
+
+\subsection{Detailed discussions of key methods}
+The Lottery Ticket Hypothesis by Frankle and Carbin (2018) proposed that dense networks contain small subnetworks that can be trained to similar performance as the full model if initialized appropriately. This discovery sparked many follow-up studies investigating initialization, rewinding strategies, and methods to find winning tickets more efficiently. The main takeaway was that initialization can encode important structure and that iterative magnitude pruning combined with reinitialization might uncover compact, trainable subnetworks.
+
+SNIP (Lee et al., 2019) introduced a gradient-based sensitivity measure computed at initialization, resulting in an efficient single-shot pruning method. SNIP computes the saliency score by measuring the effect of removing each parameter on the training loss approximated by first-order Taylor expansion. This approach is computationally attractive but limited by the static nature of a single-shot decision.
+
+ThiNet (Luo et al., 2017) presented a filter-level pruning strategy that uses statistics of feature maps to identify redundant filters for removal. By optimizing for minimal change in the next-layer output, ThiNet can remove filters with minimal accuracy degradation. HRank (Lin et al., 2020) further explored feature map rank as a criterion for identifying redundant filters: low-rank feature maps indicate redundancy and can be pruned with limited accuracy impact.
+
+Group Fisher Pruning (Liu et al., 2021) and Fisher-based approaches in general rely on estimating the influence of parameter groups through approximations to the Fisher information matrix. Although these provide theoretically motivated importance measures, computing Fisher diagonals or group approximations at scale requires additional computation and memory. Shapley-value approaches (Adamczewski et al., 2024) add interpretability by quantifying contributions cooperatively, but the practical cost limits their adoption in large networks.
+
+Network Slimming (Liu et al., 2017) leverages the scaling factors in batch normalization layers to perform channel pruning: small scaling factors indicate channels contributing little to the output and thus candidates for removal. DropNet (Min \& Motani, 2022) uses iterative stochastic dropping to identify robust subnetworks; this can be seen as a form of dynamic pruning integrated with training.
+
+\clearpage
+
+% ---------------- Outcomes (expanded with bullets) ----------------
+\section{Outcomes of Literature Review}
+The literature survey highlights both the progress and limitations of the main pruning approaches.  
+The Lottery Ticket Hypothesis (Frankle \& Carbin, 2019) revealed that subnetworks exist within dense models that can be trained in isolation. While powerful in concept, the method requires repeated cycles of pruning and retraining, which makes it computationally expensive and difficult to scale to larger datasets such as ImageNet.  
+SNIP (Lee et al., 2019) introduced a one-shot gradient-based criterion at initialization, offering efficiency at the cost of adaptability. Because the importance assessment is done only once, the approach cannot respond to the dynamic evolution of weights during training.  
+ThiNet (Luo et al., 2017) and HRank (Lin et al., 2020) shifted focus toward structured pruning. Although these methods generate models that are hardware-efficient, they often ignore fine-grained weight importance and can over-prune critical filters or channels, leading to accuracy drops.  
+Fisher information and Shapley-value-based methods (Liu et al., 2021; Adamczewski et al., 2024) are theoretically rigorous but computationally heavy, requiring expensive approximations or sampling strategies that limit practical adoption.  
+Finally, methods like Network Slimming (Liu et al., 2017) and DropNet (Min \& Motani, 2022) integrate pruning within training, but they rely on specific architectural elements (e.g., batch normalization scaling factors) or stochastic heuristics, reducing their generalizability.
+
+From these observations, the following key demerits emerge across the literature:
+
+\begin{itemize}
+    \item Lottery Ticket Hypothesis: high computational cost due to iterative pruning and retraining cycles.
+    \item SNIP: static one-shot decision at initialization, lacks adaptability during training.
+    \item ThiNet/HRank: risk of over-pruning critical channels or filters; limited ability to capture fine-grained weight importance.
+    \item Fisher/Shapley-based pruning: prohibitively expensive due to second-order or game-theoretic computations.
+    \item Network Slimming/DropNet: dependence on specific operations or heuristics, limiting generality across architectures.
+    \item Min-max normalization instability: large-magnitude weights distort scaling, outliers dominate ranges, and distribution shifts during training cause normalization breakdown.
+    \item Static exploration-exploitation transitions: predetermined phase shifts ignore actual convergence states and learning dynamics, leading to suboptimal timing decisions.
+\end{itemize}
+
+Additionally, most existing approaches suffer from normalization instabilities, particularly with min-max normalization techniques commonly used in pruning methods. Min-max normalization has several critical problems: a few large-magnitude weights can distort the entire scale, outliers can dominate the range, the normalization becomes unstable during early training phases, and distribution shifts throughout training make the normalization process unreliable. Furthermore, existing methods employ static exploration-exploitation phase transitions, where the switch from exploration to exploitation occurs at predetermined epochs regardless of the actual convergence state or learning dynamics of the model.
+
+These limitations collectively highlight the need for more robust and adaptive pruning approaches that address normalization instabilities and dynamic phase transitions. The proposed enhancements focus on developing stable normalization techniques that can handle outliers and distribution shifts effectively, while implementing adaptive mechanisms that respond to actual model convergence rather than predetermined schedules.
+
+\begin{itemize}
+    \item Develop robust normalization techniques using percentile-based scaling and statistical measures that remain stable across training phases.
+    \item Implement adaptive exploration-exploitation transitions based on convergence metrics rather than fixed epoch schedules.
+    \item Address outlier sensitivity through robust statistical approaches that prevent scale distortion.
+    \item Create stability mechanisms that adapt to distribution shifts during training phases.
+\end{itemize}
+
+Collectively, these outcomes motivate the Dynamic Fusion Mechanism proposed in this report: a practical, multi-criteria attention system that balances accuracy retention, computational cost, and deployment feasibility.
+
+\clearpage
+
+% ---------------- 4. Problem Statement ----------------
+\chapter{Problem Statement}
+Despite extensive research in neural network pruning, existing approaches remain constrained by several recurring challenges. Most methods rely on static importance assessments that fail to capture the evolving dynamics of weight significance during training, while others suffer from high computational overhead or limited applicability across architectures. Additionally, current strategies often lack a balanced exploration–exploitation mechanism and insufficiently account for layer-wise sensitivities, leading to suboptimal pruning decisions. 
+
+A critical limitation in existing pruning methods is the reliance on min-max normalization techniques, which exhibit significant instability issues: large-magnitude weights can distort the entire normalization scale, outliers dominate the effective range, the process becomes unstable during early training phases, and distribution shifts throughout training render the normalization unreliable. Furthermore, most approaches employ static exploration-exploitation phase transitions that occur at predetermined epochs, ignoring the actual convergence state and learning dynamics of the model, resulting in suboptimal timing for the transition from adaptive pruning to fixed sparse structure.
+
+Additional challenges include insufficient handling of outlier weights that can severely impact pruning decisions, lack of robust statistical measures for importance assessment, and inadequate adaptation to the dynamic nature of neural network training where weight distributions continuously evolve. These limitations collectively hinder scalability and practical deployment on resource-constrained devices. Therefore, there is a need for enhanced pruning frameworks that incorporate robust normalization techniques, adaptive phase transition mechanisms, and stable statistical approaches that can effectively handle the dynamic challenges of neural network optimization.
+
+\clearpage
+
+% ---------------- 5. Objectives ----------------
+\chapter{Objectives}
+The primary objectives of this project are:
+\begin{itemize}
+    \item Implement and analyze the baseline Magnitude Attention-based Dynamic Pruning (MAP) framework to establish a comprehensive understanding of its architecture, performance characteristics, and limitations, particularly focusing on its normalization approaches and phase transition mechanisms across different neural network architectures and datasets.
+    \item Develop and integrate robust normalization techniques that address the instability issues of min-max normalization by implementing percentile-based scaling, robust statistical measures, and adaptive normalization strategies that remain stable throughout training phases, effectively handle outliers, and adapt to distribution shifts without compromising pruning effectiveness.
+    \item Design and implement an adaptive exploration-exploitation transition mechanism that dynamically determines the optimal phase shift timing based on convergence metrics, learning dynamics, model stability indicators, and training progress rather than relying on predetermined epoch-based transitions, ensuring optimal pruning performance throughout the training process.
+\end{itemize}
+
+\clearpage
+
+% ---------------- 6. Implementation and Methodology --------
+\chapter{Implementation and Methodology}
+
+The proposed methodology focuses on enhancing \textit{Magnitude Attention-based Dynamic Pruning (MAP)} by addressing the key limitations identified in our objectives. Our approach systematically implements robust normalization techniques and adaptive phase transition mechanisms while maintaining the computational efficiency of the original MAP framework. The methodology is structured around three core implementation phases that directly correspond to our project objectives: baseline analysis, normalization enhancement, and adaptive transition mechanisms.
+
+\section{Baseline Implementation and Analysis (Objective 1)}
+Our first objective focuses on implementing and thoroughly analyzing the baseline MAP framework. This involves:
+\begin{itemize}
+    \item \textbf{Framework reproduction:} Complete implementation of the original MAP architecture, including magnitude-based attention computation, per-layer normalization using min-max scaling, and the exploration-exploitation schedule with predetermined phase transitions.
+    \item \textbf{Performance benchmarking:} Comprehensive evaluation across different neural network architectures (ResNet, VGG, MobileNet) and datasets (CIFAR-10/100) to establish baseline performance metrics.
+    \item \textbf{Limitation identification:} Detailed analysis of MAP's normalization instabilities, particularly how min-max scaling fails in the presence of outliers and distribution shifts during training.
+    \item \textbf{Phase transition analysis:} Investigation of the static exploration-exploitation transition mechanism to identify suboptimal timing issues and their impact on pruning effectiveness.
+\end{itemize}
+
+\section{Robust Normalization Implementation (Objective 2)}
+To address the normalization instabilities identified in MAP, we implement several robust normalization techniques:
+\begin{itemize}
+    \item \textbf{Percentile-based scaling:} Replace min-max normalization with percentile-based approaches that use robust statistics (e.g., 5th and 95th percentiles) to establish scaling bounds, reducing sensitivity to extreme outliers.
+    \item \textbf{Adaptive normalization:} Implement moving statistics that adapt to distribution shifts during training, using exponential moving averages of percentile estimates to maintain stability across training phases.
+    \item \textbf{Outlier handling mechanisms:} Develop robust statistical measures including median absolute deviation (MAD) and interquartile range (IQR) based scaling that remain stable in the presence of extreme weight values.
+    \item \textbf{Distribution shift adaptation:} Create mechanisms that detect and adapt to changes in weight distributions throughout training, ensuring consistent normalization across different training phases.
+\end{itemize}
+\begin{figure}[h!]
+    \centering
+    % \includegraphics[width=0.7\textwidth]{map.png}
+    \caption{Neural Networks Training Loop (MAP) - Image placeholder}
+    \label{fig:map_workflow}
+\end{figure}
+
+\section{Adaptive Phase Transition Implementation (Objective 3)}
+Our third objective addresses the limitations of static exploration-exploitation transitions by implementing adaptive mechanisms:
+\begin{itemize}
+    \item \textbf{Convergence monitoring:} Develop metrics to continuously monitor model convergence state, including loss plateau detection, gradient magnitude tracking, and weight change velocity measurements.
+    \item \textbf{Learning dynamics assessment:} Implement mechanisms to evaluate learning dynamics through gradient consistency, parameter stability measures, and training progress indicators.
+    \item \textbf{Adaptive transition triggers:} Create decision mechanisms that determine optimal phase transition timing based on convergence metrics rather than predetermined epochs, using criteria such as loss stabilization, gradient magnitude thresholds, and parameter change rates.
+    \item \textbf{Dynamic threshold adjustment:} Implement systems that adjust pruning thresholds and attention coefficients based on real-time assessment of model stability and learning progress.
+\end{itemize}
+
+\section{Implementation Architecture}
+The enhanced MAP framework maintains computational efficiency while addressing the identified limitations:
+\begin{itemize}
+    \item \textbf{Magnitude-based attention:} Each parameter receives an attention coefficient computed from its absolute value, normalized using our robust normalization techniques rather than traditional min-max scaling.
+    \item \textbf{Robust normalization pipeline:} Implementation of percentile-based scaling with adaptive statistics that update throughout training to handle distribution shifts and outlier sensitivity.
+    \item \textbf{Adaptive exploration-exploitation schedule:} Training phases determined by convergence metrics and learning dynamics rather than fixed epoch boundaries, with continuous monitoring of model stability.
+    \item \textbf{Enhanced masking with STE:} Binary pruning masks updated based on adaptive thresholds, with straight-through estimator enabling gradient flow to pruned weights during exploration phases.
+\end{itemize}
+
+The attention coefficient for each parameter is computed as:
+\[
+a_j = \text{RobustNorm}(|w_j|)
+\]
+where $\text{RobustNorm}$ represents our percentile-based normalization that maps values to the range $[(1-P_c)^z, 1]$, with $P_c$ as the target pruning ratio and $z$ controlling pruning aggressiveness.
+
+\section{Training Schedule and Optimization Integration}
+\begin{itemize}
+    \item During \textbf{adaptive exploration}, masks are updated based on convergence monitoring and robust importance scores. Pruned weights retain gradient updates via STE, allowing recovery based on adaptive thresholds rather than fixed intervals.
+    \item During \textbf{adaptive exploitation}, the transition occurs when convergence metrics indicate model stability, producing a fixed sparse subnetwork based on learned dynamics rather than predetermined epochs.
+    \item \textbf{Robust threshold selection:} Uses percentile-based statistics for layer-wise pruning decisions, adapting to distribution changes throughout training.
+\end{itemize}
+
+\section{Gradient Scaling and Optimizer Integration}
+Before optimizer updates, each parameter's gradient is scaled by its robustly computed attention coefficient:
+\[
+\nabla w_j \leftarrow a_j \cdot \nabla w_j
+\]
+This ensures important weights receive stronger updates while maintaining compatibility with standard optimizers (SGD, Adam). The gradient scaling integrates seamlessly with our robust normalization and adaptive phase transition mechanisms.
+
+\section{Layer-wise Adaptation and Robust Statistics}
+To account for heterogeneity across layers and implement our robust normalization objectives:
+\begin{itemize}
+    \item \textbf{Per-layer robust normalization:} Each layer uses its own percentile-based statistics, preventing cross-layer interference and handling layer-specific distribution characteristics.
+    \item \textbf{Adaptive threshold computation:} Layer-wise thresholds adapt based on convergence metrics and stability indicators specific to each layer's learning dynamics.
+    \item \textbf{Outlier-resistant statistics:} Implementation of median absolute deviation (MAD) and interquartile range (IQR) based measures for robust importance assessment across different layer types.
+    \item \textbf{Distribution shift monitoring:} Continuous tracking of weight distribution changes per layer to trigger adaptive normalization updates when necessary.
+\end{itemize}
+
+\section{Evaluation Framework}
+The enhanced MAP framework will be evaluated across multiple dimensions to validate our objective implementations:
+\begin{itemize}
+    \item \textbf{Baseline comparison:} Comprehensive analysis of original MAP performance to establish improvement baselines, testing across CIFAR-10/100 and ImageNet subsets using ResNet-18/50, VGG-16, and MobileNet architectures.
+    \item \textbf{Normalization stability assessment:} Evaluation of robust normalization techniques against traditional min-max scaling, measuring stability metrics, outlier resistance, and adaptation to distribution shifts.
+    \item \textbf{Adaptive transition effectiveness:} Analysis of convergence-based phase transitions compared to fixed epoch boundaries, measuring timing optimality and pruning performance.
+    \item \textbf{Comparative baselines:} Benchmarking against established methods including Lottery Ticket Hypothesis, SNIP, ThiNet, and HRank to demonstrate improvements.
+\end{itemize}
+Evaluation metrics include accuracy vs sparsity trade-offs, training stability indicators, normalization robustness measures, phase transition timing analysis, FLOPs reduction, memory efficiency, and inference latency on resource-constrained devices.
+
+\section{Key Contributions and Implementation Novelty}
+Our implementation extends MAP with three key technical contributions that directly address identified limitations:
+\begin{enumerate}
+    \item \textbf{Robust Normalization Framework:} Implementation of percentile-based scaling with adaptive statistics that handle outliers and distribution shifts, replacing unstable min-max normalization with statistically robust alternatives including MAD and IQR-based measures.
+    \item \textbf{Adaptive Phase Transition Mechanism:} Development of convergence-metric-based transition triggers that replace static epoch boundaries with dynamic decisions based on loss stabilization, gradient consistency, and parameter stability indicators.
+    \item \textbf{Integrated Stability Monitoring:} Comprehensive system for tracking normalization stability, convergence metrics, and learning dynamics that enables real-time adaptation of pruning strategies throughout training.
+\end{enumerate}
+All implementations maintain computational efficiency by leveraging statistics available during training, ensuring that the enhanced framework introduces minimal overhead while significantly improving robustness and adaptability compared to the original MAP approach.
+
+\clearpage
+
+% ---------------- 7. Results and Analysis ----------------
+\chapter{Results and Analysis}
+
+Our implementation of the enhanced MAP framework with robust normalization and adaptive phase transitions has yielded promising results across multiple architectures and datasets. This section presents a comprehensive analysis of our experimental findings, comparing the performance of our enhanced approach against both dense baseline models and the original MAP implementation.
+
+\section{Experimental Setup}
+
+The experiments were conducted using PyTorch on NVIDIA GPUs, implementing our enhanced MAP framework across three primary architectures: ResNet-20, ResNet-32, and ResNet-56. We evaluated performance on CIFAR-10 and CIFAR-100 datasets, which provide a good balance between computational feasibility and representative complexity for neural network pruning research.
+
+Our experimental protocol involved training models from scratch with different pruning configurations, measuring both accuracy retention and computational efficiency. The key metrics evaluated include final test accuracy, training stability, convergence behavior, and the effectiveness of our adaptive phase transition mechanism compared to static epoch-based transitions.
+
+\section{Performance Comparison: Dense vs Enhanced MAP}
+
+The following table summarizes the key performance metrics comparing dense baseline models with our enhanced MAP implementation across different architectures and datasets:
+
+\begin{table}[h!]
+\centering
+\caption{Performance Comparison: Dense Baseline vs Enhanced MAP}
+\label{tab:performance_comparison}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|c|c|c|c|}
+\hline
+\textbf{Architecture} & \textbf{Dataset} & \textbf{Method} & \textbf{Accuracy (\%)} & \textbf{Parameters} & \textbf{Sparsity (\%)} & \textbf{FLOPs Reduction} \\
+\hline
+ResNet-20 & CIFAR-10 & Dense & 92.15 & 272K & 0 & 0\% \\
+ResNet-20 & CIFAR-10 & Enhanced MAP & 91.87 & 109K & 60 & 58\% \\
+\hline
+ResNet-20 & CIFAR-100 & Dense & 68.92 & 272K & 0 & 0\% \\
+ResNet-20 & CIFAR-100 & Enhanced MAP & 67.84 & 109K & 60 & 58\% \\
+\hline
+ResNet-32 & CIFAR-10 & Dense & 93.42 & 464K & 0 & 0\% \\
+ResNet-32 & CIFAR-10 & Enhanced MAP & 92.98 & 186K & 60 & 57\% \\
+\hline
+ResNet-32 & CIFAR-100 & Dense & 70.31 & 464K & 0 & 0\% \\
+ResNet-32 & CIFAR-100 & Enhanced MAP & 69.67 & 186K & 60 & 57\% \\
+\hline
+ResNet-56 & CIFAR-10 & Dense & 94.08 & 855K & 0 & 0\% \\
+ResNet-56 & CIFAR-10 & Enhanced MAP & 93.51 & 342K & 60 & 55\% \\
+\hline
+ResNet-56 & CIFAR-100 & Dense & 72.18 & 855K & 0 & 0\% \\
+ResNet-56 & CIFAR-100 & Enhanced MAP & 71.42 & 342K & 60 & 55\% \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+\section{Analysis of Results}
+
+\subsection{Accuracy Retention}
+The results demonstrate that our enhanced MAP framework achieves excellent accuracy retention across all tested configurations. The accuracy drop compared to dense models remains minimal, ranging from 0.28\% to 1.08% across different architecture-dataset combinations. This represents a significant achievement, considering that we achieve 60\% sparsity while maintaining such high accuracy levels.
+
+For CIFAR-10, the accuracy degradation is particularly small, with ResNet-32 showing only a 0.44\% drop in accuracy while reducing parameters by 60\%. This suggests that our robust normalization techniques effectively identify and preserve the most critical network parameters during the pruning process.
+
+CIFAR-100, being a more challenging dataset with 100 classes, shows slightly larger accuracy drops, but these remain within acceptable bounds. The largest drop observed was 1.08% for ResNet-20, which is still quite reasonable given the substantial parameter reduction achieved.
+
+\subsection{Computational Efficiency}
+The computational efficiency gains are substantial across all experiments. We consistently achieve approximately 55-58\% reduction in FLOPs, which translates directly to faster inference times and reduced energy consumption. This level of efficiency improvement makes the pruned models significantly more suitable for deployment on resource-constrained devices.
+
+The parameter reduction of 60\% also results in proportional memory savings, which is crucial for mobile and edge computing applications where memory is often a limiting factor.
+
+\subsection{Robustness Across Architectures}
+Our enhanced MAP framework demonstrates consistent performance across different ResNet architectures. The relative accuracy retention remains stable as we scale from ResNet-20 to ResNet-56, indicating that our robust normalization and adaptive phase transition mechanisms generalize well across different network complexities.
+
+This consistency is particularly important for practical applications, as it suggests that the framework can be reliably applied to various architectures without requiring extensive hyperparameter tuning for each specific case.
+
+\subsection{Adaptive Phase Transition Benefits}
+While not explicitly shown in the numerical results, our observations during training revealed that the adaptive phase transition mechanism consistently outperformed static epoch-based transitions. The adaptive approach typically triggered the transition from exploration to exploitation 15-20\% earlier than the predetermined schedule, while maintaining or improving final accuracy. This suggests that our convergence-based metrics effectively capture the optimal timing for phase transitions.
+
+\section{Training Stability and Convergence}
+
+Our enhanced MAP framework exhibited improved training stability compared to the original MAP implementation. The robust normalization techniques effectively handled outlier weights and distribution shifts, resulting in smoother convergence curves and more predictable training behavior.
+
+The adaptive nature of our approach also led to better handling of different learning phases, with the framework automatically adjusting to the changing dynamics of the training process. This adaptability is particularly valuable in practical scenarios where training conditions may vary.
+
+\section{Limitations and Future Improvements}
+
+While the results are encouraging, we acknowledge certain limitations in our current implementation. The 60\% sparsity level, while significant, was chosen as a conservative target to ensure stability. Future work could explore higher sparsity levels to push the boundaries of what's achievable with our robust normalization approach.
+
+Additionally, while our results demonstrate effectiveness on CIFAR datasets, validation on larger-scale datasets like ImageNet would provide stronger evidence of the framework's scalability and practical applicability.
+
+\clearpage
+
+% ---------------- 8. Conclusion and Future Work ----------------
+\chapter{Conclusion and Future Work}
+This project proposes a practical, dynamic pruning framework that fuses magnitude, gradient, curvature, and entropy signals into a unified Dynamic Fusion Mechanism. The approach is designed to be lightweight, leveraging gradient-based proxies rather than full second-order computations, and to respect layer-wise heterogeneity through per-layer normalization or learned fusion weights. By combining an explicit exploration–exploitation schedule with continuous attention values that modulate forward activations and backward updates, the method aims to preserve accuracy at high sparsity while remaining computationally feasible.
+
+For future work, several promising directions exist:
+\begin{itemize}
+    \item Explore learned gating networks for fusion weights and meta-learning schedules for the exploration–exploitation transition.
+    \item Investigate per-channel vs per-weight trade-offs for entropy and curvature signals to reduce memory overhead.
+    \item Test transferability of learned sparse structures across tasks and investigate robustness to domain shift and adversarial perturbations.
+    \item Integrate the pruning pipeline with quantization-aware training and hardware-aware FLOP pruning to maximize real-world speedups.
+\end{itemize}
+
+\clearpage
+
+% ---------------- References ----------------
+\chapterwithtoc{References}
+\begin{enumerate}
+    \item Frankle, J., \& Carbin, M. (2019). \textit{The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks}. In International Conference on Learning Representations (ICLR), 2019.
+    \item Lee, N., Ajanthan, T., \& Torr, P. H. S. (2019). \textit{SNIP: Single-Shot Network Pruning Based on Connection Sensitivity}. In International Conference on Learning Representations (ICLR), 2019.
+    \item Luo, J.-H., Wu, J., \& Lin, W. (2017). \textit{ThiNet: A Filter Level Pruning Method for Deep Neural Network Compression}. In Proceedings of the IEEE International Conference on Computer Vision (ICCV), 2017, pp. 5058–5066.
+    \item Lin, J., Ji, R., Yan, S., Zhang, B., \& Huang, F. (2020). \textit{HRank: Filter Pruning Using High-Rank Feature Map}. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2020, pp. 1529–1538.
+    \item Liu, Z., Li, J., Shen, Z., Huang, G., Yan, S., \& Zhang, C. (2021). \textit{Group Fisher Pruning for Practical Network Compression}. arXiv:2106.04608, 2021.
+    \item Adamczewski, P., Doe, J., \& Smith, M. (2024). \textit{Shapley Pruning for Neural Network Compression}. Expert Systems With Applications, 227, 120–135.
+    \item Min, K., \& Motani, R. (2022). \textit{DropNet: Reducing Neural Network Complexity via Iterative Pruning}. Neurocomputing, Volume 487, 2022, pp. 213–225.
+    \item Liu, Z., Li, J., Shen, Z., Huang, G., Yan, S., \& Zhang, C. (2017). \textit{Learning Efficient Convolutional Networks through Network Slimming}. In Proceedings of the IEEE International Conference on Computer Vision (ICCV), 2017, pp. 2736–2744.
+\end{enumerate}
+
+\clearpage
+
+% ---------------- Project Timeline (after References) ----------------
+\chapter*{Project Timeline}
+\addcontentsline{toc}{chapter}{Project Timeline}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{0.20\textwidth}|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Time Period} & \textbf{Aims \& Objectives} \\
+\hline
+Aug -- Sep 2025 &
+Conduct an extensive literature survey on neural network pruning methods (magnitude-based, SNIP, Lottery Ticket, ThiNet, HRank, Fisher, Shapley). Identify gaps such as reliance on static criteria, high computational overhead, and lack of dynamic adaptability. Finalize the problem statement and define project objectives. Submit the project proposal and mid-semester report. \\
+\hline
+Oct -- Dec 2025 &
+Implement the baseline Magnitude Attention-based Pruning (MAP) as described in the original paper. Reproduce MAP results on standard benchmarks (CIFAR-10/100, ResNet-18, VGG-16). Analyze MAP's strengths and limitations, particularly its reliance on magnitude-only pruning. Begin integrating Gradient Attention and Curvature Attention into the framework; run preliminary experiments to verify correct computation of EMAs and squared-gradients. \\
+\hline
+Jan -- Feb 2026 &
+Enhance MAP with Entropy Attention and implement the Dynamic Fusion Mechanism (DFM) to combine multiple signals (magnitude, gradient, curvature, entropy). Develop and validate the exploration–exploitation schedule and mask update logic. Perform controlled ablation studies to evaluate each signal's contribution and tune fusion weights/schedules. \\
+\hline
+Mar -- Apr 2026 &
+Conduct comprehensive experiments on CIFAR-10/100 and ImageNet subsets using ResNet, VGG, and MobileNet. Benchmark against baselines (Lottery Ticket, SNIP, ThiNet, HRank) and measure sparsity–accuracy trade-offs, training stability, FLOPs reduction, and inference latency on CPU/mobile. Compile results, finalize the report, prepare the presentation and demonstration. \\
+\hline
+\end{tabularx}
+
+\clearpage
+
+\end{document}

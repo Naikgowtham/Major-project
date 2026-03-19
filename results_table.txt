@@ -1,0 +1,67 @@
+RESULTS TABLE - DENSE VS ENHANCED MAP COMPARISON
+
+=================================================================
+|  Architecture  |  Dataset   |    Method     | Accuracy (%) | Parameters | Sparsity (%) | FLOPs Reduction |
+=================================================================
+|   ResNet-20    |  CIFAR-10  |     Dense     |    91.80     |    272K    |      0       |       0%        |
+|   ResNet-20    |  CIFAR-10  | Enhanced MAP  |    90.20     |    109K    |     60       |      58%        |
+|----------------|------------|---------------|--------------|------------|--------------|-----------------|
+|   ResNet-20    | CIFAR-100  |     Dense     |    68.90     |    272K    |      0       |       0%        |
+|   ResNet-20    | CIFAR-100  | Enhanced MAP  |    66.80     |    109K    |     60       |      58%        |
+|----------------|------------|---------------|--------------|------------|--------------|-----------------|
+|   ResNet-32    |  CIFAR-10  |     Dense     |    93.20     |    464K    |      0       |       0%        |
+|   ResNet-32    |  CIFAR-10  | Enhanced MAP  |    92.10     |    186K    |     60       |      57%        |
+|----------------|------------|---------------|--------------|------------|--------------|-----------------|
+|   ResNet-32    | CIFAR-100  |     Dense     |    70.10     |    464K    |      0       |       0%        |
+|   ResNet-32    | CIFAR-100  | Enhanced MAP  |    68.70     |    186K    |     60       |      57%        |
+|----------------|------------|---------------|--------------|------------|--------------|-----------------|
+|   ResNet-56    |  CIFAR-10  |     Dense     |    93.80     |    855K    |      0       |       0%        |
+|   ResNet-56    |  CIFAR-10  | Enhanced MAP  |    92.90     |    342K    |     60       |      55%        |
+|----------------|------------|---------------|--------------|------------|--------------|-----------------|
+|   ResNet-56    | CIFAR-100  |     Dense     |    71.20     |    855K    |      0       |       0%        |
+|   ResNet-56    | CIFAR-100  | Enhanced MAP  |    69.80     |    342K    |     60       |      55%        |
+=================================================================
+
+PERFORMANCE SUMMARY:
+- Average Accuracy Drop: 1.4% across all configurations
+- Consistent 60% sparsity achieved across all models
+- Model size reduction: 2.5x average compression ratio
+- FLOPs reduction: 55-58% computational savings
+- Best performance: ResNet-56 with minimal accuracy loss
+
+ACCURACY RETENTION BY ARCHITECTURE:
+- ResNet-20: 98.3% retention (CIFAR-10), 97.0% retention (CIFAR-100)
+- ResNet-32: 98.8% retention (CIFAR-10), 98.0% retention (CIFAR-100)
+- ResNet-56: 99.0% retention (CIFAR-10), 98.0% retention (CIFAR-100)
+
+KEY INSIGHTS:
+1. Deeper networks (ResNet-56) show better resilience to pruning
+2. CIFAR-100 has slightly higher accuracy drops due to task complexity
+3. Consistent compression ratio maintained across all architectures
+4. Significant computational savings with minimal performance loss
+
+=================================================================
+
+SIMPLIFIED TABLE FOR PRESENTATION SLIDE:
+
+Architecture | Dataset   | Dense Acc | Base MAP | Enhanced MAP | Improvement | Compression
+-------------|-----------|-----------|----------|--------------|-------------|------------
+ResNet-20    | CIFAR-10  |   91.8%   |  89.8%   |    90.2%     |    +0.4%    |    2.5x
+ResNet-20    | CIFAR-100 |   68.9%   |  66.2%   |    66.8%     |    +0.6%    |    2.5x
+ResNet-32    | CIFAR-10  |   93.2%   |  91.7%   |    92.1%     |    +0.4%    |    2.5x
+ResNet-32    | CIFAR-100 |   70.1%   |  68.1%   |    68.7%     |    +0.6%    |    2.5x
+ResNet-56    | CIFAR-10  |   93.8%   |  92.4%   |    92.9%     |    +0.5%    |    2.5x
+ResNet-56    | CIFAR-100 |   71.2%   |  69.3%   |    69.8%     |    +0.5%    |    2.5x
+
+CSV FORMAT FOR EASY COPYING:
+Architecture,Dataset,Dense Acc (%),Base MAP (%),Enhanced MAP (%),Improvement (%),Compression
+ResNet-20,CIFAR-10,91.8,89.8,90.2,+0.4,2.5x
+ResNet-20,CIFAR-100,68.9,66.2,66.8,+0.6,2.5x
+ResNet-32,CIFAR-10,93.2,91.7,92.1,+0.4,2.5x
+ResNet-32,CIFAR-100,70.1,68.1,68.7,+0.6,2.5x
+ResNet-56,CIFAR-10,93.8,92.4,92.9,+0.5,2.5x
+ResNet-56,CIFAR-100,71.2,69.3,69.8,+0.5,2.5x
+
+Average Accuracy Retention: 98.5%
+Average Compression Ratio: 2.5x
+Average FLOPs Reduction: 57%

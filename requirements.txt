@@ -1,6 +1,23 @@
-torch>=2.0.0
-torchvision>=0.15.0
+# PyTorch with CUDA 12.1 support
+torch==2.5.1+cu121
+torchvision==0.20.1+cu121
+torchaudio==2.5.1+cu121
+
+# Scientific Computing
 numpy>=1.21.0
+pandas>=1.3.0
+
+# Visualization
 matplotlib>=3.5.0
-tqdm>=4.64.0
-tensorboard>=2.10.0
+seaborn>=0.11.0
+
+# Progress bars and utilities
+tqdm>=4.60.0
+
+# Jupyter support
+ipykernel>=6.15.0
+jupyter>=1.0.0
+notebook>=6.4.0
+
+# Additional utilities for deep learning
+Pillow>=8.0.0
